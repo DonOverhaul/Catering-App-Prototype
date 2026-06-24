@@ -10,195 +10,72 @@ interface Props {
   onToggleFavourite?: () => void;
 }
 
-function SpicyBadge({ level }: { level: Vendor['spicyLevel'] }) {
-  if (level === 'none') return null;
-  const labels: Record<string, string> = {
-    mild: '🌶️ Mild',
-    medium: '🌶️🌶️ Medium',
-    hot: '🌶️🌶️🌶️ Hot',
-    'extra-hot': '🌶️🌶️🌶️🌶️ Extra Hot',
-  };
-  return (
-    <View style={badgeStyles.spicy}>
-      <Text style={badgeStyles.spicyText}>{labels[level]}</Text>
-    </View>
-  );
-}
-
 export default function VendorCard({ vendor, onPress, isFavourite, onToggleFavourite }: Props) {
+  const spicyLabels: Record<string, string> = { mild: '🌶️ Mild', medium: '🌶️🌶️ Medium', hot: '🌶️🌶️🌶️ Hot', 'extra-hot': '🌶️🌶️🌶️🌶️ Extra Hot' };
+
   return (
-    <TouchableOpacity style={styles.card} onPress={onPress} activeOpacity={0.85}>
-      {/* Image placeholder */}
-      <View style={styles.imagePlaceholder}>
-        <Text style={styles.emoji}>{vendor.imagePlaceholder}</Text>
+    <TouchableOpacity style={s.card} onPress={onPress} activeOpacity={0.88}>
+      <View style={s.imgBox}>
+        <Text style={s.emoji}>{vendor.imagePlaceholder}</Text>
         {vendor.isHalalFriendly && (
-          <View style={styles.halalBadge}>
-            <Text style={styles.halalText}>HALAL</Text>
-          </View>
+          <View style={s.halalBadge}><Text style={s.halalText}>HALAL</Text></View>
         )}
         {onToggleFavourite && (
-          <TouchableOpacity style={styles.heartBtn} onPress={onToggleFavourite}>
-            <Text style={styles.heartIcon}>{isFavourite ? '❤️' : '🤍'}</Text>
+          <TouchableOpacity style={s.heart} onPress={onToggleFavourite}>
+            <Text style={{ fontSize: 22 }}>{isFavourite ? '❤️' : '🤍'}</Text>
           </TouchableOpacity>
         )}
       </View>
 
-      {/* Content */}
-      <View style={styles.content}>
-        <View style={styles.row}>
-          <Text style={styles.name} numberOfLines={1}>
-            {vendor.name}
-          </Text>
-          <View style={styles.ratingRow}>
-            <Text style={styles.star}>⭐</Text>
-            <Text style={styles.rating}>{vendor.rating.toFixed(1)}</Text>
-            <Text style={styles.reviewCount}>({vendor.reviewCount})</Text>
+      <View style={s.body}>
+        <View style={s.row}>
+          <Text style={s.name} numberOfLines={1}>{vendor.name}</Text>
+          <View style={s.ratingRow}>
+            <Text style={s.star}>⭐</Text>
+            <Text style={s.rating}>{vendor.rating.toFixed(1)}</Text>
+            <Text style={s.reviewCount}> ({vendor.reviewCount})</Text>
           </View>
         </View>
 
-        <Text style={styles.city}>📍 {vendor.city}</Text>
+        <Text style={s.city}>📍 {vendor.city}</Text>
 
-        <SpicyBadge level={vendor.spicyLevel} />
+        {vendor.spicyLevel !== 'none' && (
+          <View style={s.spicyBadge}>
+            <Text style={s.spicyText}>{spicyLabels[vendor.spicyLevel]}</Text>
+          </View>
+        )}
 
-        {/* Tags */}
-        <View style={styles.tags}>
-          {vendor.tags.slice(0, 3).map((tag) => (
-            <View key={tag} style={styles.tag}>
-              <Text style={styles.tagText}>{tag}</Text>
-            </View>
+        <View style={s.tags}>
+          {vendor.tags.slice(0, 3).map((t) => (
+            <View key={t} style={s.tag}><Text style={s.tagText}>{t}</Text></View>
           ))}
         </View>
 
-        {/* Price range */}
-        <Text style={styles.price}>
-          From RM{vendor.priceRange.min} – RM{vendor.priceRange.max} / pax
-        </Text>
+        <Text style={s.price}>From RM{vendor.priceRange.min} – RM{vendor.priceRange.max} / pax</Text>
       </View>
     </TouchableOpacity>
   );
 }
 
-const styles = StyleSheet.create({
-  card: {
-    backgroundColor: Colors.surface,
-    borderRadius: 16,
-    marginBottom: 16,
-    shadowColor: '#000',
-    shadowOffset: { width: 0, height: 2 },
-    shadowOpacity: 0.07,
-    shadowRadius: 8,
-    elevation: 3,
-    overflow: 'hidden',
-  },
-  imagePlaceholder: {
-    height: 140,
-    backgroundColor: Colors.primaryLight,
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-  emoji: {
-    fontSize: 56,
-  },
-  halalBadge: {
-    position: 'absolute',
-    top: 10,
-    left: 10,
-    backgroundColor: Colors.halalGreen,
-    borderRadius: 6,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-  },
-  halalText: {
-    fontSize: 10,
-    fontWeight: '700',
-    color: Colors.halalGreenText,
-    letterSpacing: 0.5,
-  },
-  heartBtn: {
-    position: 'absolute',
-    top: 8,
-    right: 10,
-    padding: 4,
-  },
-  heartIcon: {
-    fontSize: 22,
-  },
-  content: {
-    padding: 14,
-  },
-  row: {
-    flexDirection: 'row',
-    justifyContent: 'space-between',
-    alignItems: 'flex-start',
-    marginBottom: 4,
-  },
-  name: {
-    fontSize: 16,
-    fontWeight: '700',
-    color: Colors.textPrimary,
-    flex: 1,
-    marginRight: 8,
-  },
-  ratingRow: {
-    flexDirection: 'row',
-    alignItems: 'center',
-  },
-  star: {
-    fontSize: 12,
-    marginRight: 2,
-  },
-  rating: {
-    fontSize: 13,
-    fontWeight: '700',
-    color: Colors.textPrimary,
-  },
-  reviewCount: {
-    fontSize: 11,
-    color: Colors.textMuted,
-    marginLeft: 2,
-  },
-  city: {
-    fontSize: 13,
-    color: Colors.textSecondary,
-    marginBottom: 6,
-  },
-  tags: {
-    flexDirection: 'row',
-    flexWrap: 'wrap',
-    marginTop: 6,
-    marginBottom: 8,
-    gap: 4,
-  },
-  tag: {
-    backgroundColor: Colors.primaryLight,
-    borderRadius: 8,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-  },
-  tagText: {
-    fontSize: 11,
-    color: Colors.primary,
-    fontWeight: '600',
-  },
-  price: {
-    fontSize: 13,
-    color: Colors.textSecondary,
-    fontWeight: '500',
-  },
-});
-
-const badgeStyles = StyleSheet.create({
-  spicy: {
-    alignSelf: 'flex-start',
-    backgroundColor: Colors.spicyRed,
-    borderRadius: 8,
-    paddingHorizontal: 8,
-    paddingVertical: 3,
-    marginBottom: 4,
-  },
-  spicyText: {
-    fontSize: 11,
-    color: Colors.spicyRedText,
-    fontWeight: '600',
-  },
+const s = StyleSheet.create({
+  card: { backgroundColor: Colors.surface, borderRadius: 16, marginBottom: 16, shadowColor: '#000', shadowOffset: { width: 0, height: 2 }, shadowOpacity: 0.07, shadowRadius: 8, elevation: 3, overflow: 'hidden' },
+  imgBox: { height: 140, backgroundColor: Colors.primaryLight, alignItems: 'center', justifyContent: 'center' },
+  emoji: { fontSize: 56 },
+  halalBadge: { position: 'absolute', top: 10, left: 10, backgroundColor: Colors.halalGreen, borderRadius: 6, paddingHorizontal: 8, paddingVertical: 3 },
+  halalText: { fontSize: 10, fontWeight: '700', color: Colors.halalGreenText, letterSpacing: 0.5 },
+  heart: { position: 'absolute', top: 8, right: 10 },
+  body: { padding: 14 },
+  row: { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center', marginBottom: 4 },
+  name: { fontSize: 16, fontWeight: '700', color: Colors.textPrimary, flex: 1, marginRight: 8 },
+  ratingRow: { flexDirection: 'row', alignItems: 'center' },
+  star: { fontSize: 12 },
+  rating: { fontSize: 13, fontWeight: '700', color: Colors.textPrimary },
+  reviewCount: { fontSize: 11, color: Colors.textMuted },
+  city: { fontSize: 13, color: Colors.textSecondary, marginBottom: 6 },
+  spicyBadge: { alignSelf: 'flex-start', backgroundColor: Colors.spicyRed, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3, marginBottom: 6 },
+  spicyText: { fontSize: 11, color: Colors.spicyRedText, fontWeight: '600' },
+  tags: { flexDirection: 'row', flexWrap: 'wrap', gap: 4, marginBottom: 8 },
+  tag: { backgroundColor: Colors.primaryLight, borderRadius: 8, paddingHorizontal: 8, paddingVertical: 3 },
+  tagText: { fontSize: 11, color: Colors.primary, fontWeight: '600' },
+  price: { fontSize: 13, color: Colors.textSecondary, fontWeight: '500' },
 });

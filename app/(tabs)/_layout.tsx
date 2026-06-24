@@ -1,46 +1,26 @@
-import { Stack } from 'expo-router';
-import { StatusBar } from 'expo-status-bar';
+import { Tabs } from 'expo-router';
+import { Text } from 'react-native';
+import { Colors } from '../../src/constants/colors';
 
-export default function RootLayout() {
+function Icon({ emoji, focused }: { emoji: string; focused: boolean }) {
+  return <Text style={{ fontSize: focused ? 22 : 19, opacity: focused ? 1 : 0.45 }}>{emoji}</Text>;
+}
+
+export default function TabLayout() {
   return (
-    <>
-      <StatusBar style="dark" />
-      <Stack screenOptions={{ headerShown: false }}>
-        <Stack.Screen name="(tabs)" />
-        <Stack.Screen
-          name="vendor/[id]"
-          options={{
-            headerShown: true,
-            headerTitle: '',
-            headerBackTitle: 'Back',
-            headerTintColor: '#E8622A',
-            headerStyle: { backgroundColor: '#FAFAF8' },
-            headerShadowVisible: false,
-          }}
-        />
-        <Stack.Screen
-          name="package/[id]"
-          options={{
-            headerShown: true,
-            headerTitle: 'Package Details',
-            headerBackTitle: 'Back',
-            headerTintColor: '#E8622A',
-            headerStyle: { backgroundColor: '#FAFAF8' },
-            headerShadowVisible: false,
-          }}
-        />
-        <Stack.Screen
-          name="quote/[vendorId]"
-          options={{
-            headerShown: true,
-            headerTitle: 'Request Quote',
-            headerBackTitle: 'Back',
-            headerTintColor: '#E8622A',
-            headerStyle: { backgroundColor: '#FAFAF8' },
-            headerShadowVisible: false,
-          }}
-        />
-      </Stack>
-    </>
+    <Tabs
+      screenOptions={{
+        headerShown: false,
+        tabBarActiveTintColor: Colors.primary,
+        tabBarInactiveTintColor: Colors.textMuted,
+        tabBarStyle: { backgroundColor: Colors.surface, borderTopColor: Colors.border, paddingBottom: 4, height: 60 },
+        tabBarLabelStyle: { fontSize: 11, fontWeight: '600', marginTop: 2 },
+      }}
+    >
+      <Tabs.Screen name="index" options={{ title: 'Home', tabBarIcon: ({ focused }) => <Icon emoji="🏠" focused={focused} /> }} />
+      <Tabs.Screen name="explore" options={{ title: 'Explore', tabBarIcon: ({ focused }) => <Icon emoji="🔍" focused={focused} /> }} />
+      <Tabs.Screen name="favourites" options={{ title: 'Saved', tabBarIcon: ({ focused }) => <Icon emoji="❤️" focused={focused} /> }} />
+      <Tabs.Screen name="profile" options={{ title: 'Profile', tabBarIcon: ({ focused }) => <Icon emoji="👤" focused={focused} /> }} />
+    </Tabs>
   );
 }

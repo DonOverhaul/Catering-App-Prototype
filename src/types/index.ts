@@ -1,30 +1,7 @@
 export type SpicyLevel = 'none' | 'mild' | 'medium' | 'hot' | 'extra-hot';
-
 export type PriceUnit = 'per pax' | 'per meal' | 'per package';
-
-export type CuisineType =
-  | 'Malay'
-  | 'Chinese'
-  | 'Indian'
-  | 'Western'
-  | 'Mexican'
-  | 'Japanese'
-  | 'Korean'
-  | 'Fusion'
-  | 'Dessert'
-  | 'Healthy';
-
-export type EventType =
-  | 'Wedding'
-  | 'Birthday'
-  | 'Corporate'
-  | 'Family Gathering'
-  | 'Meal Prep'
-  | 'Office Lunch'
-  | 'Sports / Gym'
-  | 'Buffet'
-  | 'Casual Dinner'
-  | 'Snack / Dessert Event';
+export type CuisineType = 'Malay' | 'Chinese' | 'Indian' | 'Western' | 'Mexican' | 'Japanese' | 'Healthy' | 'Dessert' | 'Fusion';
+export type EventType = 'Wedding' | 'Birthday' | 'Corporate' | 'Family Gathering' | 'Meal Prep' | 'Office Lunch' | 'Sports / Gym' | 'Buffet' | 'Casual Dinner' | 'Snack / Dessert Event';
 
 export interface Package {
   id: string;
@@ -51,23 +28,8 @@ export interface Vendor {
   cuisineTypes: CuisineType[];
   isHalalFriendly: boolean;
   minOrderPax: number;
-  priceRange: {
-    min: number;
-    max: number;
-  };
+  priceRange: { min: number; max: number };
   spicyLevel: SpicyLevel;
-  imagePlaceholder: string; // emoji or colour code used as placeholder
+  imagePlaceholder: string;
   packages: Package[];
 }
-
-export type FilterState = {
-  city: string | null;
-  maxBudgetPerPax: number | null;
-  minPax: number | null;
-  dietaryTags: string[];
-  cuisineTypes: CuisineType[];
-  halalOnly: boolean;
-  mealPrepOnly: boolean;
-  spicyLevel: SpicyLevel | null;
-  sortBy: 'rating' | 'price' | 'popularity';
-};
